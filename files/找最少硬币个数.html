@@ -19,14 +19,19 @@ function findMinCount() {
 	const v = [1, 3, 5] //面额1、3、5的硬币
 	const S = 11	//要凑够11元
 	const result = []
+
+	//初始化
 	for(let i = 1; i <= S; i++) {
-		result[i] = Number.MAX_VALUE
+		result[i] = Number.MAX_VALUE 
 	}
-	
 	result[0] = 0
+
+	//递推公式 
+	//result(i)=min{ result(i-v[j])+1 }
+	//其中i-v[j] >=0，vj表示第j个硬币的面值
 	for(let i = 1; i <= S; i++) {
 		for(let j = 0; j < v.length; j++) {
-			if(result[i - v[j]] + 1 < result[i]) {
+			if(i - v[j] >=0 && result[i - v[j]] + 1 < result[i]) {
 				result[i] = result[i - v[j]] + 1
 			}
 		}
