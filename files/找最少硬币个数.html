@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>
+问：如果我们有面值为1元、3元和5元的硬币若干枚，如何用最少的硬币凑够11元？
+</h1>
+结果：
+<br>
+<p id='p'></p>
+分析：
+<br>
+<p>
+	使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
+</p>
+
+<script>
+function findMinCount() {
+	const v = [1, 3, 5] //面额1、3、5的硬币
+	const S = 11	//要凑够11元
+	const result = []
+	for(let i = 1; i <= S; i++) {
+		result[i] = Number.MAX_VALUE
+	}
+	
+	result[0] = 0
+	for(let i = 1; i <= S; i++) {
+		for(let j = 0; j < v.length; j++) {
+			if(result[i - v[j]] + 1 < result[i]) {
+				result[i] = result[i - v[j]] + 1
+			}
+		}
+	}
+
+	let resultString = ''
+	for(let i = 0; i <= S; i++) {
+		resultString += 'result[' + i + ']' + '=' + result[i] + '<br>'
+	}
+	document.getElementById('p').innerHTML = resultString
+}
+findMinCount()
+</script>
+</body>
+</html>
