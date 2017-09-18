@@ -28,7 +28,7 @@ function findMinCount() {
 
 	//递推公式 
 	//result(i)=min{ result(i-v[j])+1 }
-	//其中i-v[j] >=0，vj表示第j个硬币的面值
+	//其中i-v[j] >= 0，vj表示第j个硬币的面值
 	for(let i = 1; i <= S; i++) {
 		for(let j = 0; j < v.length; j++) {
 			if(i - v[j] >=0 && result[i - v[j]] + 1 < result[i]) {
