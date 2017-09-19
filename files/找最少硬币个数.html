@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<style type="text/css">
+		pre {font-size: 20px;}
+	</style>
+</head>
 <body>
 
 <h1>
 问：如果我们有面值为1元、3元和5元的硬币若干枚，如何用最少的硬币凑够11元？
 </h1>
-结果：
-<br>
-<p id='p'></p>
+
+<pre>
 分析：
-<br>
-<p>
-	使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
-</p>
+
+使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
+递推公式：result(i)=min{ result(i-v[j])+1 }, 其中i-v[j] >= 0，v[j]表示第j个硬币的面值
+</pre>
+
+结果：
+<p id='p2'></p>
 
 <script>
 function findMinCount() {
@@ -26,9 +33,6 @@ function findMinCount() {
 	}
 	result[0] = 0
 
-	//递推公式 
-	//result(i)=min{ result(i-v[j])+1 }
-	//其中i-v[j] >= 0，vj表示第j个硬币的面值
 	for(let i = 1; i <= S; i++) {
 		for(let j = 0; j < v.length; j++) {
 			if(i - v[j] >=0 && result[i - v[j]] + 1 < result[i]) {
@@ -41,7 +45,7 @@ function findMinCount() {
 	for(let i = 0; i <= S; i++) {
 		resultString += 'result[' + i + ']' + '=' + result[i] + '<br>'
 	}
-	document.getElementById('p').innerHTML = resultString
+	document.getElementById('p2').innerHTML = resultString
 }
 findMinCount()
 </script>
