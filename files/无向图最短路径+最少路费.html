@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		pre {font-size: 20px;}
+		ul {font-size: 16px;}
+	</style>
+</head>
+<body>
+
+<h1>
+问：无向图G有N个结点，它的边上带有正的权重值。你从结点1开始走，并且一开始的时候你身上带有M元钱。如果你经过结点i， 那么你就要花掉S[i]元(可以把这想象为收过路费)。如果你没有足够的钱， 就不能从那个结点经过。在这样的限制条件下，找到从结点1到结点N的最短路径。 或者输出该路径不存在。如果存在多条最短路径，那么输出花钱数量最少的那条。
+<br/>
+<br/>
+N属于(0, 100]; M属于[0, 100]; 对于每个i，S[i]属于[0, 100]
+下面的例子为了方便观察，将100 改成了5。
+</h1>
+
+格子：
+<br>
+<p id='p_graph'></p>
+<br>
+
+每个点的花费：
+<br>
+<p id='p_spend'></p>
+<br>
+
+<pre>
+分析：
+
+使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
+1. 在未标记的中，找到和起点最近的点
+2. 设置为标记
+3. 所有未标记的点，如果剩下的钱够通过这个点，则更新通过中介点到达起点的最短距离
+</pre>
+
+结果：
+<p id='p2'></p>
+
+<script>
+const VALUE = 5
+
+function createGraph() {
+ const G = []
+ for (let i = 1; i <= VALUE; i++) {
+ 	G[i] = []
+ 	for (let j = 1; j < i; j++) {
+ 		//随机连接，如果连接了再随机分配权重。其中-1代表无连接。
+ 		const connect = Math.ceil(Math.random() * VALUE) % 2 == 0
+ 		G[i][j] = connect ? Math.ceil(Math.random() * VALUE) : Number.MAX_VALUE
+ 		G[j][i] = G[i][j]
+ 	}
+ }
+ return G
+}
+
+function showGraph(G) {
+	let resultString = '<table border=\'1\'>'
+	const length = G.length
+	for (let i = 1; i < length; i++) {
+		resultString += '<tr>'
+		for (let j = 1; j < i; j++) {
+ 			resultString += '<td>G['+ i +'][' + j + '] = ' + G[i][j] + '</td>'
+ 		}
+		resultString += '</tr>'
+ 	}
+ 	resultString += '</table>'
+	document.getElementById('p_graph').innerHTML = resultString
+}
+
+function createSpend() {
+	const S = [] //例如S[2]表示经过节点2需要的费用
+	for(let i = 1; i <= VALUE; i ++) {
+		S[i] = Math.ceil(Math.random() * VALUE)
+	}
+	return S
+}
+
+function showSpend(S) {
+	let resultString = ''
+	const length = S.length
+	for (let i = 1; i < length; i++) {
+		resultString += 'S[' + i + '] = ' + S[i] + '<br>'
+ 	}
+	document.getElementById('p_spend').innerHTML = resultString
+}
+
+function createNode(data, next) {
+	return {
+		data: data,
+		next: next,
+	}
+}
+
+function getNodeListString(node) {
+	let resultString = ''
+	let p = node
+	while(p) {
+		resultString += '->' + p.data
+		p = p.next
+	}
+	return resultString
+}
+
+function findShortestPath(G, S) {
+	//想找1-N的最短路径
+	const min = [] //例如Min[2][l], 表示2节点到起点的最短距离，剩余l元。
+	const tag = [] //表示是否被标记
+
+	//初始化 
+	// min[1] = []
+	// min[1][VALUE] = 0
+	// tag[1][VALUE] = true
+	for(let j = 0; j <= VALUE; j++) {
+		tag[1] = []
+		min[1] = []
+		tag[1][j] = false
+		min[1][j] = Number.MAX_VALUE
+	}
+	for(let i = 1 + 1; i <= VALUE; i++) {
+		tag[i] = []
+		min[i] = []
+		for(let j = 0; j <= VALUE; j++) {
+			tag[i][j] = false
+			min[i][j] = Number.MAX_VALUE
+		}
+		const k = VALUE - S[1]
+		if (k >= 0) {
+			min[i][k] = G[i][1]
+		}
+	}
+
+	let resultString = ''
+	while(true) {
+		//1. 在未标记的中，找到和起点最近的点
+		let minIndex = 0
+		let money = 0
+		let minDistance = Number.MAX_VALUE
+		for(let i = 1 + 1; i <= VALUE; i++) {
+			for(let j = 0; j <= VALUE; j++) {
+				if(tag[i][j] == false && min[i][j] < minDistance) {
+					minDistance = min[i][j]
+					minIndex = i
+					money = j
+				}
+			}	
+		}
+		if (minIndex == 0) break
+		//2. 设置为标记
+		tag[minIndex][money] = true
+		//3. 
+		for(let i = 1 + 1; i <= VALUE; i++) {
+			for(let j = 0; j <= VALUE; j++) {
+				if(money - j > 0 && 
+					tag[i][money - j] == false && 
+					min[minIndex][money] + G[minIndex][i] < min[i][money - j]) {
+					resultString += '' + i + ',' + j + ',' + money + ', min[i][money - j] = ' + min[i][money - j]
+						+ ', min[minIndex][money] =' + min[minIndex][money] + ', G[minIndex][i] = ' + G[minIndex][i] + '<br/>'
+
+
+					min[i][money - j] = min[minIndex][money] + G[minIndex][i]
+				}
+			}	
+		}
+	}
+
+	//输出
+	resultString += '<br/><br/>'	
+	for(let i = 1 + 1; i <= VALUE; i++) {
+		for (let j = 0; j <= VALUE; j ++) {
+			resultString += 'min[' + i + '][' + j + ']=' + 
+				(min[i][j] == Number.MAX_VALUE ? '不存在这样的路径' : min[i][j]) + ', '
+		}
+		resultString += '<br/>'
+	}
+	document.getElementById('p2').innerHTML = resultString
+}
+
+let G = createGraph()
+let S = createSpend()
+showGraph(G)
+showSpend(S)
+findShortestPath(G, S)
+</script>
+</body>
+</html>
+

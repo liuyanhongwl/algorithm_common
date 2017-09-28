@@ -3,6 +3,7 @@
 <head>
 	<style type="text/css">
 		pre {font-size: 20px;}
+		ul {font-size: 16px;}
 	</style>
 </head>
 <body>
@@ -20,10 +21,15 @@
 分析：
 
 使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
-1. 找到和起点最近的点
+1. 在未标记点中，找到和起点最近的点
 2. 设置为标记
 3. 更新所有未标记的点，以这个点为中介到达起点的最短距离
-<a href='http://blog.csdn.net/qq_27508477/article/details/47317281'>Dijkstra 最短路径算法详解 无向图</a>
+
+参考：
+<ul>
+	<li><a href='http://blog.csdn.net/qq_27508477/article/details/47317281'>Dijkstra 最短路径算法详解 无向图</a></li>
+	<li><a href='http://blog.csdn.net/dmgy614262711/article/details/56677690'>最短路径和最少花费问题--动态规划</a></li>
+</ul>
 </pre>
 
 结果：
@@ -59,24 +65,42 @@ function showGraph(G) {
 	document.getElementById('p').innerHTML = resultString
 }
 
+function createNode(data, next) {
+	return {
+		data: data,
+		next: next,
+	}
+}
+
+function getNodeListString(node) {
+	let resultString = ''
+	let p = node
+	while(p) {
+		resultString += '->' + p.data
+		p = p.next
+	}
+	return resultString
+}
+
 function findShortestPath(G) {
 	//想找1-N的最短路径
-	//找到子问题： 找到与1距离为1的节点、找到与1距离为2的节点...
 	const length = G.length
-	const distance = [] //例如distance[2]表示节点2到节点1的距离
+	const distance = [] //例如distance[2]表示节点2到起点的距离
 	const tag = [] //表示是否被标记
+	const node = [] //用链表记录路径， 例如node[2]表示节点2到起点的最短路径
 
-	//初始化
+	//初始化 
 	distance[1] = 0
 	tag[1] = true
 	for(let i = 1 + 1; i < length; i++) {
 		distance[i] = G[i][1]
 		tag[i] = false
+		node[i] = createNode(1, null)
 	}
 
 	for (let i = 1; i < length; i++) {
 		//i只做计数器
-		//1. 找到和起点最近的点
+		//1. 在未标记的中，找到和起点最近的点
 		let minIndex = 0;
 		let minDistance = Number.MAX_VALUE
 		for (let j = 1; j < length; j++) {
@@ -92,6 +116,7 @@ function findShortestPath(G) {
 		for (let j = 1; j < length; j++) {
 			if (tag[j] == false && distance[minIndex] + G[minIndex][j] < distance[j]) {
 				distance[j] = distance[minIndex] + G[minIndex][j]
+				node[j] = createNode(minIndex, node[minIndex])
 			}
 		}
 	}
@@ -100,7 +125,7 @@ function findShortestPath(G) {
 	let resultString = ''	
 	for(let i = 1; i < length; i++) {
 		resultString += 'distance[' + i + ']' + '=' + 
-		(distance[i] == Number.MAX_VALUE ? '不存在这样的路径' : distance[i]) + '<br>'
+		(distance[i] == Number.MAX_VALUE ? '不存在这样的路径' : distance[i] + ': ' + getNodeListString(node[i])) + '<br>'
 	}
 	document.getElementById('p2').innerHTML = resultString
 }
