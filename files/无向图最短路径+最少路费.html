@@ -2,8 +2,7 @@
 <html>
 <head>
 	<style type="text/css">
-		pre {font-size: 20px;}
-		ul {font-size: 16px;}
+		pre {font-size: 18px;}
 	</style>
 </head>
 <body>
@@ -30,13 +29,28 @@ N属于(0, 100]; M属于[0, 100]; 对于每个i，S[i]属于[0, 100]
 分析：
 
 使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
+这个问题是在“迪杰斯特拉算法”的基础上增加一个维度存剩余钱数，并且多一层判断，判断是否有足够的钱到达某点。
+
+步骤：
 1. 在未标记的中，找到和起点最近的点
 2. 设置为标记
-3. 所有未标记的点，如果剩下的钱够通过这个点，则更新通过中介点到达起点的最短距离
+3. 找到有足够钱能到达&&未标记的点，更新通过这个点到起点的距离
+4. 得到某点到起点的最短路径，如果有多个最短路径，取剩余钱数最多的
+
+具体过程：
+1. min[i][j]，表示结点i到起点的距离，j表示剩余钱数。
+   tag[i][j]，对应min的i、j，表示是否被标记。
+2. 初始化：对于所有的i属于(1, VALUE]，j属于[0, VALUE], min[i][j] = MAX_VALUE， tag[i][j] = false
+   初始化：其中与起点直接相连的点，如果有足够钱到达（VALUE - S[i] > 0）, min[i][VALUE - S[i]] = G[i][VALUE - S[i]]
+3. 对于所有i、j，找到距离最小的点
+   如果没有这个点，则退出
+   如果有这个点，标记这个点minIndex，找到有足够钱能到达&&未标记的点，更新通过minIndex点到起点的距离
+4. 对于每个点i, 取{min[i][j]，0<=j<=VALUE}中最小值作为最短路径。
+   如果有多个最短路径，取j最大的，即剩余钱最多的。
 </pre>
 
 结果：
-<p id='p2'></p>
+<p id='p_result'></p>
 
 <script>
 const VALUE = 5
@@ -106,18 +120,9 @@ function getNodeListString(node) {
 function findShortestPath(G, S) {
 	//想找1-N的最短路径
 	const min = [] //例如Min[2][l], 表示2节点到起点的最短距离，剩余l元。
-	const tag = [] //表示是否被标记
+	const tag = [] //例如tag[2][l], 表示是否被标记
 
 	//初始化 
-	// min[1] = []
-	// min[1][VALUE] = 0
-	// tag[1][VALUE] = true
-	for(let j = 0; j <= VALUE; j++) {
-		tag[1] = []
-		min[1] = []
-		tag[1][j] = false
-		min[1][j] = Number.MAX_VALUE
-	}
 	for(let i = 1 + 1; i <= VALUE; i++) {
 		tag[i] = []
 		min[i] = []
@@ -125,13 +130,12 @@ function findShortestPath(G, S) {
 			tag[i][j] = false
 			min[i][j] = Number.MAX_VALUE
 		}
-		const k = VALUE - S[1]
+		const k = VALUE - S[i]
 		if (k >= 0) {
 			min[i][k] = G[i][1]
 		}
 	}
 
-	let resultString = ''
 	while(true) {
 		//1. 在未标记的中，找到和起点最近的点
 		let minIndex = 0
@@ -149,24 +153,20 @@ function findShortestPath(G, S) {
 		if (minIndex == 0) break
 		//2. 设置为标记
 		tag[minIndex][money] = true
-		//3. 
+		//3. 找到有足够钱能到达的点，并且未标记的点，更新通过这个点到起点的距离
 		for(let i = 1 + 1; i <= VALUE; i++) {
-			for(let j = 0; j <= VALUE; j++) {
-				if(money - j > 0 && 
-					tag[i][money - j] == false && 
-					min[minIndex][money] + G[minIndex][i] < min[i][money - j]) {
-					resultString += '' + i + ',' + j + ',' + money + ', min[i][money - j] = ' + min[i][money - j]
-						+ ', min[minIndex][money] =' + min[minIndex][money] + ', G[minIndex][i] = ' + G[minIndex][i] + '<br/>'
-
-
-					min[i][money - j] = min[minIndex][money] + G[minIndex][i]
-				}
-			}	
+			const k = money - S[i]
+			if(k > 0 && 
+				tag[i][k] == false && 
+				min[minIndex][money] + G[minIndex][i] < min[i][k]) {
+				min[i][k] = min[minIndex][money] + G[minIndex][i]
+			}
 		}
 	}
 
 	//输出
-	resultString += '<br/><br/>'	
+	let resultString = '对于每个点i, 取{min[i][j]，0<=j<=VALUE}中最小值作为最短路径。<br/>'
+	resultString += '如果有多个最短路径，取j最大的，即剩余钱最多的。<br/>'
 	for(let i = 1 + 1; i <= VALUE; i++) {
 		for (let j = 0; j <= VALUE; j ++) {
 			resultString += 'min[' + i + '][' + j + ']=' + 
@@ -174,7 +174,7 @@ function findShortestPath(G, S) {
 		}
 		resultString += '<br/>'
 	}
-	document.getElementById('p2').innerHTML = resultString
+	document.getElementById('p_result').innerHTML = resultString
 }
 
 let G = createGraph()
