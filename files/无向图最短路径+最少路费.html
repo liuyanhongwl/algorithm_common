@@ -2,7 +2,7 @@
 <html>
 <head>
 	<style type="text/css">
-		pre {font-size: 18px;}
+		pre {font-size: 16px;color:blue;}
 	</style>
 </head>
 <body>
@@ -16,14 +16,10 @@ N属于(0, 100]; M属于[0, 100]; 对于每个i，S[i]属于[0, 100]
 </h1>
 
 格子：
-<br>
 <p id='p_graph'></p>
-<br>
 
 每个点的花费：
-<br>
 <p id='p_spend'></p>
-<br>
 
 <pre>
 分析：
@@ -94,9 +90,10 @@ function createSpend() {
 function showSpend(S) {
 	let resultString = ''
 	const length = S.length
-	for (let i = 1; i < length; i++) {
-		resultString += 'S[' + i + '] = ' + S[i] + '<br>'
+	for (let i = 1 + 1; i < length; i++) {
+		resultString += 'S[' + i + '] = ' + S[i] + ', '
  	}
+ 	resultString += '<br>'
 	document.getElementById('p_spend').innerHTML = resultString
 }
 
