@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		pre {font-size: 20px;}
+	</style>
+</head>
+<body>
+
+<h1>
+问：一个序列有N个数：A[1],A[2],…,A[N]，求出最长非降子序列的长度。 (讲DP基本都会讲到的一个问题LIS：longest increasing subsequence)
+</h1>
+
+<pre>
+分析：
+
+使用了动态规划的思想，基于一个递推公式及一个或多个初始状态，当前子问题的解将由上一个子问题的解推出。
+递推公式：result(i)=max{ 1, result(j)+1 }, 其中j < i并且A[j] <= A[i]。d(i)，表示前i个数中以A[i]结尾的最长非降子序列的长度。
+</pre>
+
+结果：
+<p id='p2'></p>
+
+<script>
+function findMaxList() {
+	const A = [5, 3, 4, 8, 6, 7] 
+	const result = []
+
+	//初始化
+	for(let i = 0; i < A.length; i++) {
+		result[i] = 1;
+	}
+
+	for(let i = 0; i < A.length; i++) {
+		for(let j = 0; j < i; j++) {
+			if(A[j] <= A[i] && result[j] + 1 > result[i]) {
+				result[i] = result[j] + 1
+			}
+		}
+	}
+
+	let resultString = ''
+	for(let i = 0; i < A.length; i++) {
+		resultString += 'result[' + i + ']' + '=' + result[i] + '<br>'
+	}
+	document.getElementById('p2').innerHTML = resultString
+}
+findMaxList()
+</script>
+</body>
+</html>
