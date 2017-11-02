@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		pre {font-size: 16px;}
+		pre #analyze{font-size: 16px;color:blue;}
+		p {color:red;}
+	</style>
+</head>
+<body>
+
+<h1>
+独木桥
+</h1>
+
+<pre>
+【题目描述】
+有座独木桥十分狭窄，只能容纳一个人通过。
+假如有两个人相向而行在桥上相遇，那么他们两个人将无妨绕过对方，只能有一个人回头下桥，让另一个人先通过。
+
+你的部队士兵在这座桥上，突然，你收到从指挥部发来的信息，敌军的轰炸机正朝着你所在的独木桥飞来！
+为了安全，你的部队必须撤下独木桥。独木桥的长度为L，士兵们只能呆在坐标为整数的地方。
+所有士兵的速度都为1，如果一个士兵某一时刻来到了坐标为0或L+1的位置，他就离开了独木桥。
+
+每个士兵都有一个初始面对的方向，他们会以匀速朝着这个方向行走，中途不会自己改变方向。
+但是，如果两个士兵面对面相遇，他们无法彼此通过对方，于是就分别转身，继续行走。转身不需要任何的时间。
+
+你需要知道你的部队全部撤离最短需要多长时间，最长需要多长时间。
+<pre>
+
+<pre>
+【结果】
+长度为L=10，士兵分别战在：
+2 4 9
+
+最短时间、最长时间：
+<p id='p'></p>
+</pre>
+
+<pre id="analyze">
+【分析】
+当两个士兵相遇时，两人均掉头，但是也可以理解为两人换了个位置继续前进，
+所以最短时间就是每个人离岸边最短距离的最大值，最长时间就是每个人离岸边最长距离的最大值。
+</pre>
+
+<script>
+function calculateTime() {
+	const L = 10;
+	const list = [2, 4, 9];
+	let minTime = 0;
+	let maxTime = 0;
+
+	for (let i = 0; i < list.length; i++) {
+		minTime = Math.max(minTime, Math.min(list[i], L - list[i]));
+		maxTime = Math.max(maxTime, Math.max(list[i], L - list[i]));
+	}
+
+	document.getElementById('p').innerHTML = minTime + ', ' + maxTime;
+}
+
+calculateTime();
+</script>
+</body>
+</html>
+
