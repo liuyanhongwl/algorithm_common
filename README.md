@@ -10,7 +10,6 @@
  * [前奇数后偶数](files/前奇数后偶数.md)
  * [逆波兰表达式](files/逆波兰表达式.md)
  * [原码、反码、补码](files/原码、反码、补码.md)
-
  * [无向图最短路径](files/无向图最短路径.html)
 
 #### 动态规划
@@ -26,5 +25,17 @@
  * [合并果子](files/合并果子.html)
  * [导弹拦截](files/合并果子.html)
  * [独木桥](files/合并果子.html)
+
+#### LeetCode
+
+* [1. Two Sum]()
+* [4.Median of Two Sorted Arrays](https://zhangslob.github.io/2017/05/19/Leetcode-4-Median-of-Two-Sorted-Arrays/)
+* [7. Reverse Integer]()
+* [9. Palindrome Number]()
+* [50. Pow(x, n) （计算x的n次方）]()
+
+#### 剑指offer
+
+* [ 【剑指Offer学习】【所有面试题汇总】](https://blog.csdn.net/derrantcm/article/details/46887821)
 
 
