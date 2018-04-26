@@ -29,8 +29,8 @@
  * [N位数删除K个数字，使剩下的数字串最小](https://blog.csdn.net/hxz_qlh/article/details/14229169)
  * [均分纸牌](files/均分纸牌.html)
  * [合并果子](files/合并果子.html)
- * [导弹拦截](files/合并果子.html)
- * [独木桥](files/合并果子.html)
+ * [导弹拦截](files/导弹拦截.html)
+ * [独木桥](files/独木桥.html)
 
 #### LeetCode
 
