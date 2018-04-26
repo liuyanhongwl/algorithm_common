@@ -11,6 +11,11 @@
  * [逆波兰表达式](files/逆波兰表达式.md)
  * [原码、反码、补码](files/原码、反码、补码.md)
 
+
+#### 算法
+
+* [算法](files/算法.md)
+
 #### 动态规划
 
  * [无向图最短路径](files/无向图最短路径.html)
@@ -21,6 +26,7 @@
 
 #### 贪心算法
 
+ * [N位数删除K个数字，使剩下的数字串最小](https://blog.csdn.net/hxz_qlh/article/details/14229169)
  * [均分纸牌](files/均分纸牌.html)
  * [合并果子](files/合并果子.html)
  * [导弹拦截](files/合并果子.html)
