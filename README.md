@@ -34,7 +34,7 @@
 
 #### LeetCode
 
-* [1. Two Sum]()
+* [1. Two Sum](https://blog.csdn.net/yang20141109/article/details/51523405)
 * [4.Median of Two Sorted Arrays](https://zhangslob.github.io/2017/05/19/Leetcode-4-Median-of-Two-Sorted-Arrays/)
 * [7. Reverse Integer]()
 * [9. Palindrome Number]()
@@ -43,5 +43,9 @@
 #### 剑指offer
 
 * [ 【剑指Offer学习】【所有面试题汇总】](https://blog.csdn.net/derrantcm/article/details/46887821)
+
+#### Others
+
+* [两个数组求公共交集](files/两个数组求公共交集.md)
 
 
